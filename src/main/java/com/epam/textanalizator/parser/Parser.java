@@ -1,8 +1,14 @@
 package com.epam.textanalizator.parser;
 
-import com.epam.textanalizator.composite.TextComponent;
+import com.epam.textanalizator.composite.Component;
 
-public interface Parser {
+public abstract class Parser {
 
-	public TextComponent parse(String content);
+	protected Parser nextParser;
+
+    public abstract Component parse(String content);
+
+    public void setProcessor(Parser nextParser) {
+        this.nextParser = nextParser;
+    }
 }

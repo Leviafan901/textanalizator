@@ -3,79 +3,91 @@ package com.epam.textanalizator.composite;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextComposite implements TextComponent {
+public class TextComposite implements Component {
 
-	private List<TextComponent> textComponents = new ArrayList<TextComponent>();
-    private ComponentType componentType;
+	private List<Component> components = new ArrayList<Component>();
 
-    public List<TextComponent> getTextComponentsByType(ComponentType inputType) {
-        if (inputType == null) {
-            throw new IllegalArgumentException("Incorrect input component inputType.");
-        }
+	public List<Component> getTextComponents() {
+		return components;
+	}
+	
+	public void add(Component component) {
+		boolean isNull = component == null;
+		if (isNull) {
+			throw new IllegalArgumentException("Incorrect input text component.");
+		}
+		components.add(component);
+	}
 
-        List<TextComponent> components = new ArrayList<>();
-        for (TextComponent currentComponent : textComponents) {
-            ComponentType currentComponentType = currentComponent.getComponentType();
-            if (currentComponentType == inputType) {
-                components.add(currentComponent);
-            }
-        }
+	public void addAll(List<Component> components) {
+		boolean isNull = components == null;
+		if (isNull) {
+			throw new IllegalArgumentException("Incorrect input text component.");
+		}
+		this.components.addAll(components);
+	}
+	
+	public void remove(Component component) {
+		boolean isEmptyComponents = components.isEmpty();
+		if (isEmptyComponents) {
+			throw new IllegalArgumentException("Components are empty.");
+		}
+		boolean isValid = components.contains(component);
+		if (isValid) {
+			components.remove(component);
+		}
+	}
 
-        if (components.size() != 0) {
-            return components;
-        } else {
-            throw new IllegalArgumentException("Such type components were not found.");
-        }
-    }
+	@Override
+	public String getContent() {
+		int componentsSize = components.size();
+		boolean isNullSize = componentsSize != 0;
+		if (isNullSize) {
+			StringBuilder result = new StringBuilder();
+			for (Component textComponent : components) {
+				result.append(textComponent.getContent());
+			}
+			return result.toString();
+		} else {
+			throw new IllegalArgumentException("Data is empty.");
+		}
+	}
 
-    public void addTextComponent(TextComponent textComponent) {
-        if (textComponent == null) {
-            throw new IllegalArgumentException("Incorrect input text component.");
-        }
+	@Override
+	public int compareTo(Component component) {
+		List<Component> secondCollection = component.getTextComponents();
+		int currentSize = this.components.size();
+		int componentSize = secondCollection.size();
+		return currentSize - componentSize;
+	}
 
-        this.textComponents.add(textComponent);
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((components == null) ? 0 : components.hashCode());
+		return result;
+	}
 
-    public void removeTextComponent(TextComponent textComponent) {
-        if (textComponent == null) {
-            throw new IllegalArgumentException("Incorrect input text component.");
-        }
-
-        if (this.textComponents.contains(textComponent)) {
-            this.textComponents.remove(textComponent);
-        } else {
-            throw new IllegalArgumentException("Text component doesn't exist in current list of components.");
-        }
-    }
-
-    public void setComponentType(ComponentType componentType) {
-        if (componentType == null) {
-            throw new IllegalArgumentException("Incorrect input component type.");
-        }
-
-        this.componentType = componentType;
-    }
-
-    public List<TextComponent> getTextComponents() {
-        return textComponents;
-    }
-
-    @Override
-    public ComponentType getComponentType() {
-        return this.componentType;
-    }
-
-    @Override
-    public String getContent() {
-        if (this.textComponents.size() != 0) {
-            StringBuilder result = new StringBuilder();
-            for (TextComponent textComponent : textComponents) {
-                result.append(textComponent.getContent());
-            }
-
-            return result.toString();
-        } else {
-            throw new IllegalArgumentException("Data is empty.");
-        }
-    }
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null) {
+			return false;
+		}
+		if (getClass() != object.getClass()) {
+			return false;
+		}
+		TextComposite otherObject = (TextComposite) object;
+		if (components == null) {
+			if (otherObject.components != null) {
+				return false;
+			}
+		} else if (!components.equals(otherObject.components)) {
+			return false;
+		}
+		return true;
+	}
 }

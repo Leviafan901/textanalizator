@@ -1,6 +1,6 @@
 package com.epam.textanalizator.composite;
 
-public enum LexemeType {
+public enum ValueType {
 
 	WORD, MATH_EXPRESSION
 }

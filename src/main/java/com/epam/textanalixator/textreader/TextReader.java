@@ -5,13 +5,13 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.epam.textanalizator.exceptions.DataReadingException;
-import com.epam.textanalizator.util.ContentMatcher;
 
 public class TextReader {
 	
 	private final static String NEW_LINE = "\r";
+	private final static String EMPTY_SYMBOL = "";
 
-	public String read(String filePath) throws DataReadingException {
+	public static String read(String filePath) throws DataReadingException {
         boolean isNullFilePath = filePath == null;
         boolean isEmptyFilePath = filePath.isEmpty();
 		if (isNullFilePath | isEmptyFilePath) {
@@ -25,7 +25,7 @@ public class TextReader {
             }
 
             String result = text.toString();
-            result = result.replaceAll(NEW_LINE, ContentMatcher.EMPTY_SYMBOL);
+            result = result.replaceAll(NEW_LINE, EMPTY_SYMBOL);
             return result;
         } catch (IOException e) {
             throw new DataReadingException("Incorrect data.", e);
